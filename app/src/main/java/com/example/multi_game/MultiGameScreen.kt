@@ -1,23 +1,28 @@
 package com.example.multi_game
 
+import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.multi_game.ui.GameViewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.composable
-import com.example.multi_game.ui.GuessingNumScreen
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.multi_game.ui.guessing_number_game.GuessingNumScreen
 import com.example.multi_game.ui.PredictGameScreen
+import com.example.multi_game.ui.quiz_game.QuizGameScreen
 
 
 enum class GameScreen {
@@ -33,9 +38,19 @@ fun GameApp(
         viewModel: GameViewModels = viewModel(),
 ){
     val navController = rememberNavController()
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = GameScreen.valueOf(
+        backStackEntry?.destination?.route ?: GameScreen.Start.name
+    )
 
     Scaffold(
-
+        topBar = {
+            GameAppBar(
+                currentScreen = currentScreen,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                navigateUp = { navController.navigateUp() }
+            )
+        }
     ) { innerPadding ->
         val uiState by viewModel.uiState.collectAsState()
 
@@ -46,17 +61,13 @@ fun GameApp(
         ){
             composable(route = GameScreen.Start.name) {
                 StartScreen(
-                    onPredictButtonClicked = {
-                        navController.navigate(GameScreen.Predict.name)},
-                    onGuessingButtonClicked = {
-                        navController.navigate(GameScreen.GuessingGame.name)
-                    }
+                    navController
                 )
             }
 
             composable(route = GameScreen.Quiz.name) {
                 val context = LocalContext.current
-
+                QuizGameScreen()
             }
 
             composable(route = GameScreen.GuessingGame.name) {
@@ -72,26 +83,48 @@ fun GameApp(
     }
 }
 
+
 @Composable
 fun StartScreen(
-    onPredictButtonClicked: () -> Unit,
-    onGuessingButtonClicked: () -> Unit
+    navController: NavController
 ){
-    Column() {
+    Column {
         Button(
-            onClick = { onGuessingButtonClicked() },
+            onClick = { navController.navigate(GameScreen.GuessingGame.name) },
             modifier = Modifier.fillMaxWidth()) {
             Text(text = "Guessing Number Game")
         }
         Button(
-            onClick = { onPredictButtonClicked() },
+            onClick = { navController.navigate(GameScreen.Quiz.name) },
             modifier = Modifier.fillMaxWidth()) {
             Text(text = "Quiz")
         }
         Button(
-            onClick = { onPredictButtonClicked() },
+            onClick = { navController.navigate(GameScreen.Predict.name) },
             modifier = Modifier.fillMaxWidth()) {
             Text(text = "Predict")
         }
     }
+}
+@Composable
+fun GameAppBar(
+    currentScreen: GameScreen,
+    canNavigateBack: Boolean,
+    navigateUp: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    TopAppBar(
+        title = { Text("Hello") },
+        modifier = modifier,
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = navigateUp) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+            }
+        }
+    )
 }
