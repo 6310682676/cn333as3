@@ -138,7 +138,7 @@ fun SecondScreen(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(250.dp))
+        Spacer(modifier = Modifier.height(120.dp))
 
         Text(
             text = "Before",
@@ -155,25 +155,52 @@ fun SecondScreen(
             text = "Siemsee",
             style = TextStyle(
                 color = Color.Black,
-                fontSize = 45.sp,
+                fontSize = 36.sp,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.W800,
                 fontStyle = FontStyle.Italic,
                 letterSpacing = 0.3.em,
             )
         )
+
+        Spacer(modifier = Modifier.height(40.dp))
+
         Text(
-            text = "lucky number", style = TextStyle(
+            text = "1. Be focused and take a deep breath", style = TextStyle(
                 color = Color.Black,
                 fontSize = 20.sp,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.W600,
                 fontStyle = FontStyle.Italic,
-                letterSpacing = 0.5.em,
+                letterSpacing = 0.em,
             )
         )
 
-        Spacer(modifier = Modifier.height(25.dp))
+        Text(
+            text = "2. Recognize about your lucky number", style = TextStyle(
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.W600,
+                fontStyle = FontStyle.Italic,
+                letterSpacing = 0.em,
+            )
+        )
+
+        Spacer(modifier = Modifier.height(120.dp))
+
+        Text(
+            text = "If You Are Ready",
+            style = TextStyle(
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontFamily = FontFamily.Serif,
+                fontWeight = FontWeight.W800,
+                letterSpacing = 0.em,
+            )
+        )
+
+        Spacer(modifier = Modifier.height(5.dp))
 
         Button(
             onClick = { navController.navigate(SiemSeeScreen.Third.name) },
@@ -186,7 +213,13 @@ fun SecondScreen(
                 contentColor = MaterialTheme.colors.onPrimary
             )
         ) {
-            Text(text = "Click me")
+            Text(text = "siem see" ,style = TextStyle(
+                color = Color.White,
+                fontSize = 25.sp,
+                fontFamily = FontFamily.SansSerif,
+                fontStyle = FontStyle.Italic,
+                letterSpacing = 0.em)
+            )
         }
 
     }
