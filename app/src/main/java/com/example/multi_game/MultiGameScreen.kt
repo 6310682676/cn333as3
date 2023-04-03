@@ -83,7 +83,7 @@ fun GameApp(
 
             composable(route = GameScreen.Quiz.name) {
                 val context = LocalContext.current
-                QuizGameScreen()
+                QuizGameScreen(navController = navController)
             }
 
             composable(route = GameScreen.GuessingGame.name) {

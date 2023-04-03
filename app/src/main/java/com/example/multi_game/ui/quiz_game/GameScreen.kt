@@ -18,13 +18,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.multi_game.GameScreen
 import com.example.multi_game.R
 
 
 @Composable
 fun QuizGameScreen(
     modifier: Modifier = Modifier,
-    gameViewModel: GameViewModel = viewModel()
+    gameViewModel: GameViewModel = viewModel(),
+    navController: NavController
 ) {
     val gameUiState by gameViewModel.uiState.collectAsState()
     Column(
@@ -74,7 +77,9 @@ fun QuizGameScreen(
         if (gameUiState.isGameOver) {
             FinalScoreDialog(
                 score = gameUiState.score,
-                onPlayAgain = { gameViewModel.resetGame() }
+                onPlayAgain = { gameViewModel.resetGame() },
+                navController = navController
+
             )
         }
 
@@ -204,7 +209,8 @@ fun GameStatus(quizCount: Int, score: Int, modifier: Modifier = Modifier) {
 private fun FinalScoreDialog(
     score: Int,
     onPlayAgain: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     val activity = (LocalContext.current as Activity)
 
@@ -220,7 +226,7 @@ private fun FinalScoreDialog(
         dismissButton = {
             TextButton(
                 onClick = {
-                    activity.finish()
+                    navController.navigate(GameScreen.Start.name)
                 }
             ) {
                 Text(text = stringResource(R.string.exit))

@@ -22,8 +22,9 @@ class GuessingNumViewModel: ViewModel() {
     }
 
     fun resetGame() {
+
         _uiState.value = GuessingNumUiState(
-            currentAnswer = Random.nextInt(1000),
+            currentAnswer = Random.nextInt(1,1000),
             currentMax = 1000,
             currentMin = 1,
             counter = 0,
@@ -32,6 +33,7 @@ class GuessingNumViewModel: ViewModel() {
             userAnswer = "",
             isCorrect = false
         )
+
     }
 
     fun updateUserGuess(answer: String){

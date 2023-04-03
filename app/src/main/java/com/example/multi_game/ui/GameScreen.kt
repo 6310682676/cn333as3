@@ -16,23 +16,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.em
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.multi_game.GameScreen
 
 enum class SiemSeeScreen(){
     First,
     Second,
     Third,
-    Fourth
+    Fourth,
+    Fifth
 }
 @Composable
-fun PredictGameScreen(){
+fun PredictGameScreen(
+    gameViewModel:PredictGameViewModel = viewModel()
+){
     val navController = rememberNavController()
 
     Scaffold { innerPadding ->
@@ -57,86 +62,34 @@ fun PredictGameScreen(){
             composable(route = SiemSeeScreen.Third.name) {
                 val context = LocalContext.current
                 ThirdScreen(
-                    navController
+                    navController,
+                    gameViewModel
                 )
             }
 
             composable(route = SiemSeeScreen.Fourth.name) {
 
                 FourthScreen(
-                    navController
+                    navController,
+                    gameViewModel
                 )
+            }
+
+            composable(route = SiemSeeScreen.Fifth.name) {
+
+                FifthScreen(
+                    gameViewModel
+                )
+
             }
         }
     }
 }
-//@Composable
-//fun PredictGameScreen(
-//    modifier: Modifier = Modifier,
-//    gameViewModel: PredictGameViewModel = viewModel()
-//) {
-//    val gameUiState by gameViewModel.uiState.collectAsState()
-//    Column(
-//        modifier = modifier
-//            .verticalScroll(rememberScrollState())
-//            .padding(16.dp),
-//        verticalArrangement = Arrangement.spacedBy(8.dp)
-//    ){
-//
-////    ) {
-////        GameStatus(
-////            quizCount = gameUiState.currentQuizCount,
-////            score = gameUiState.score
-////        )
-////
-////        GameLayout(
-////            onUserGuessChanged = { gameViewModel.updateUserGuess(it) },
-////            currentChoice = gameUiState.currentChoice!!,
-////            currentQuestion = gameUiState.currentQuestion,
-////            userAnswer = gameViewModel.userAnswer,
-////            isAnswer = gameUiState.isAnswer,
-////            currentAnswer = gameUiState.currentAnswer
-////        )
-////        Row(
-////            modifier = modifier
-////                .fillMaxWidth()
-////                .padding(top = 16.dp),
-////            horizontalArrangement = Arrangement.SpaceAround
-////        ) {
-////            if(gameUiState.isAnswer){
-////                Button(
-////                    modifier = modifier
-////                        .padding(start = 8.dp),
-////                    onClick = { gameViewModel.nextQuestion() }
-////                ) {
-////                    Text(stringResource(R.string.next))
-////                }
-////            }else{
-////                Button(
-////                    modifier = modifier
-////                        .padding(start = 8.dp),
-////                    onClick = { gameViewModel.checkUserGuess() }
-////                ) {
-////                    Text(stringResource(R.string.submit))
-////                }
-////            }
-////
-////        }
-////        if (gameUiState.isGameOver) {
-////            FinalScoreDialog(
-////                score = gameUiState.score,
-////                onPlayAgain = { gameViewModel.resetGame() }
-////            )
-////        }
-////
-//
-//    }
-//
-//}
+
 
 @Composable
 fun BeginningScreen(
-    navController: NavController
+    navController: NavController,
 ){
     Column(verticalArrangement = Arrangement.spacedBy(10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(250.dp))
@@ -188,14 +141,25 @@ fun SecondScreen(
         Spacer(modifier = Modifier.height(250.dp))
 
         Text(
-            text = "Before Siemsee",
+            text = "Before",
             style = TextStyle(
                 color = Color.Black,
                 fontSize = 45.sp,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.W800,
                 fontStyle = FontStyle.Italic,
-                letterSpacing = 0.5.em,
+                letterSpacing = 0.3.em,
+            )
+        )
+        Text(
+            text = "Siemsee",
+            style = TextStyle(
+                color = Color.Black,
+                fontSize = 45.sp,
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.W800,
+                fontStyle = FontStyle.Italic,
+                letterSpacing = 0.3.em,
             )
         )
         Text(
@@ -230,7 +194,8 @@ fun SecondScreen(
 
 @Composable
 fun ThirdScreen(
-    navController: NavController
+    navController: NavController,
+    gameViewModel:PredictGameViewModel
 ){
         Column(
             verticalArrangement = Arrangement.spacedBy(50.dp),
@@ -241,19 +206,23 @@ fun ThirdScreen(
             Text(
                 text="Choose a number"
             )
-            for (i in 1..6){
+            for (i in 1..4){
                 Row(horizontalArrangement = Arrangement.spacedBy(50.dp),){
                     Button(onClick = {
+                        println((3 * (i - 1) + 1).toString())
+                        gameViewModel.getPrediction((3 * (i - 1) + 1).toString())
                         navController.navigate(SiemSeeScreen.Fourth.name)
                     }) {
                         Text(text=(3 * (i - 1) + 1).toString())
                     }
                     Button(onClick = {
+                        gameViewModel.getPrediction((3 * (i - 1) + 2).toString())
                         navController.navigate(SiemSeeScreen.Fourth.name)
                     }) {
                         Text(text=(3 * (i - 1) + 2).toString())
                     }
                     Button(onClick = {
+                        gameViewModel.getPrediction((3 * (i - 1) + 3).toString())
                         navController.navigate(SiemSeeScreen.Fourth.name)
                     }) {
                         Text(text=(3 * (i - 1) + 3).toString())
@@ -265,15 +234,27 @@ fun ThirdScreen(
 
 @Composable
 fun FourthScreen(
-    navController: NavController
+    navController: NavController,
+    gameViewModel:PredictGameViewModel
 ){
+
+    val gameUiState by gameViewModel.uiState.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()) {
         Text(text = "")
         Spacer(modifier = Modifier.height(200.dp))
-        Button(onClick = { /*TODO*/ },
+        Button(
+            onClick = {
+                println(gameUiState.tap)
+                println(gameUiState.prediction)
+                if(gameUiState.totalTap == gameUiState.tap){
+                    navController.navigate(SiemSeeScreen.Fifth.name)
+                }else{
+                    gameViewModel.plusTap()
+                }
+            },
             modifier= Modifier.size(300.dp),  //avoid the oval shape
             shape = CircleShape,
             border= BorderStroke(1.dp, Color.Blue),
@@ -285,11 +266,44 @@ fun FourthScreen(
 
 
         ) {
-            Text(text = "TAP !!!")
+            Text(text = "TAP !!!",
+                style = TextStyle(
+                    fontSize = 50.sp,
+                )
+            )
         }
     }
 
 }
+
+@Composable
+fun FifthScreen(
+    gameViewModel:PredictGameViewModel
+
+){
+    val gameUiState by gameViewModel.uiState.collectAsState()
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            gameUiState.prediction,
+            textAlign = TextAlign.Center,
+            style = TextStyle(color = Color.Black,
+                fontSize = 16.sp,
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.W400,
+                fontStyle = FontStyle.Normal,
+                letterSpacing = 0.05.em,
+                textDecoration = TextDecoration.None) ,
+
+        )
+    }
+
+//    Text(gameUiState.prediction, style = TextStyle())
+}
+
 @Composable
 fun GameLayout(
     currentQuestion: Any?,

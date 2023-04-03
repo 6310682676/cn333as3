@@ -4,10 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.multi_game.data.predictions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlin.random.Random
 
 class PredictGameViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(GameUiState())
@@ -21,76 +23,31 @@ class PredictGameViewModel : ViewModel() {
     }
 
     fun resetGame() {
-        _uiState.value = com.example.multi_game.ui.GameUiState(
-
-
+        _uiState.value = GameUiState(
+            totalTap = Random.nextInt(20),
+            tap = 0
         )
     }
-//
-//    private fun pickRandomQuiz(): Any {
-//        // Continue picking up a new random word until you get one that hasn't been used before
-//
-//
-//    }
-//
-//    private fun getQuestion(): Any? {
-//        return (currentQuiz as Map<String, Any>)["question"]
-//    }
-//
-//    private fun getChoice(): List<String>? {
-//        val choice = (currentQuiz as Map<String, Set<String>>)["choice"]
-//        return choice?.shuffled()
-//    }
-//
-//    private  fun getAnswer(): String? {
-//        return (currentQuiz as Map<String, String>)["answer"]
-//
-//    }
-//    fun resetGame() {
-//
-//    }
-//
-//
-//    fun updateUserGuess(answer: String){
-//
-//
-//    }
-//
-//    fun nextQuestion(){
-//        if (true){
-////            //Last round in the game, update isGameOver to true, don't pick a new word
-//            _uiState.update { currentState ->
-//                currentState.copy(
-//
-//                )
-//            }
-//        }else{
-//
-//        }
-//
-//
-//    }
-//    fun checkUserGuess() {
-//
-//    }
-//
-//    private fun updateGameState(updatedScore: Int) {
-////        if (usedQuiz.size == MAX_NO_OF_QUIZZES){
-////            //Last round in the game, update isGameOver to true, don't pick a new word
-////            _uiState.update { currentState ->
-////                currentState.copy(
-////                    isAnswerCorrect = false,
-////                    score = updatedScore,
-////                    isGameOver = true
-////                )
-////            }
-////        } else{
-////            // Normal round in the game
-//        _uiState.update { currentState ->
-//            currentState.copy(
-//
-//            )
-//        }
-////        }
+
+    fun plusTap(){
+        _uiState.update { currentState ->
+            currentState.copy(
+                tap = uiState.value.tap + 1
+            )
+        }
+    }
+
+    fun getPrediction(no:String){
+        println(predictions[no]?.random())
+        val prediction = predictions[no]
+        if (prediction != null) {
+            _uiState.update { currentState ->
+                currentState.copy(
+                    prediction = prediction.random() ?: "Error not found "
+                )
+            }
+        }
+
+    }
 
 }
