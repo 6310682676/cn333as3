@@ -13,13 +13,18 @@ class PredictGameViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(GameUiState())
     val uiState: StateFlow<GameUiState> = _uiState.asStateFlow()
 
-
-    private var usedQuiz: MutableSet<Any> = mutableSetOf()
     var userAnswer by mutableStateOf("")
         private set
 
     init {
-//        resetGame()
+        resetGame()
+    }
+
+    fun resetGame() {
+        _uiState.value = com.example.multi_game.ui.GameUiState(
+
+
+        )
     }
 //
 //    private fun pickRandomQuiz(): Any {

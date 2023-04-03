@@ -1,21 +1,14 @@
 package com.example.multi_game.ui
 
-import android.app.Activity
-import android.widget.Space
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement.Absolute.Center
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.material.Text
@@ -23,81 +16,128 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.em
-import com.example.multi_game.R
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.multi_game.GameScreen
 
-
-@Composable
-fun PredictGameScreen(
-    modifier: Modifier = Modifier,
-    gameViewModel: PredictGameViewModel = viewModel()
-) {
-    val gameUiState by gameViewModel.uiState.collectAsState()
-    Column(
-        modifier = modifier
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ){
-        FourthScreen()
-//    ) {
-//        GameStatus(
-//            quizCount = gameUiState.currentQuizCount,
-//            score = gameUiState.score
-//        )
-//
-//        GameLayout(
-//            onUserGuessChanged = { gameViewModel.updateUserGuess(it) },
-//            currentChoice = gameUiState.currentChoice!!,
-//            currentQuestion = gameUiState.currentQuestion,
-//            userAnswer = gameViewModel.userAnswer,
-//            isAnswer = gameUiState.isAnswer,
-//            currentAnswer = gameUiState.currentAnswer
-//        )
-//        Row(
-//            modifier = modifier
-//                .fillMaxWidth()
-//                .padding(top = 16.dp),
-//            horizontalArrangement = Arrangement.SpaceAround
-//        ) {
-//            if(gameUiState.isAnswer){
-//                Button(
-//                    modifier = modifier
-//                        .padding(start = 8.dp),
-//                    onClick = { gameViewModel.nextQuestion() }
-//                ) {
-//                    Text(stringResource(R.string.next))
-//                }
-//            }else{
-//                Button(
-//                    modifier = modifier
-//                        .padding(start = 8.dp),
-//                    onClick = { gameViewModel.checkUserGuess() }
-//                ) {
-//                    Text(stringResource(R.string.submit))
-//                }
-//            }
-//
-//        }
-//        if (gameUiState.isGameOver) {
-//            FinalScoreDialog(
-//                score = gameUiState.score,
-//                onPlayAgain = { gameViewModel.resetGame() }
-//            )
-//        }
-//
-
-    }
-
+enum class SiemSeeScreen(){
+    First,
+    Second,
+    Third,
+    Fourth
 }
+@Composable
+fun PredictGameScreen(){
+    val navController = rememberNavController()
+
+    Scaffold { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = SiemSeeScreen.First.name,
+            modifier = Modifier.padding(innerPadding)
+        ){
+            composable(route = SiemSeeScreen.First.name) {
+                BeginningScreen(
+                    navController
+                )
+            }
+
+            composable(route = SiemSeeScreen.Second.name) {
+                val context = LocalContext.current
+                SecondScreen(
+                    navController
+                )
+            }
+
+            composable(route = SiemSeeScreen.Third.name) {
+                val context = LocalContext.current
+                ThirdScreen(
+                    navController
+                )
+            }
+
+            composable(route = SiemSeeScreen.Fourth.name) {
+
+                FourthScreen(
+                    navController
+                )
+            }
+        }
+    }
+}
+//@Composable
+//fun PredictGameScreen(
+//    modifier: Modifier = Modifier,
+//    gameViewModel: PredictGameViewModel = viewModel()
+//) {
+//    val gameUiState by gameViewModel.uiState.collectAsState()
+//    Column(
+//        modifier = modifier
+//            .verticalScroll(rememberScrollState())
+//            .padding(16.dp),
+//        verticalArrangement = Arrangement.spacedBy(8.dp)
+//    ){
+//
+////    ) {
+////        GameStatus(
+////            quizCount = gameUiState.currentQuizCount,
+////            score = gameUiState.score
+////        )
+////
+////        GameLayout(
+////            onUserGuessChanged = { gameViewModel.updateUserGuess(it) },
+////            currentChoice = gameUiState.currentChoice!!,
+////            currentQuestion = gameUiState.currentQuestion,
+////            userAnswer = gameViewModel.userAnswer,
+////            isAnswer = gameUiState.isAnswer,
+////            currentAnswer = gameUiState.currentAnswer
+////        )
+////        Row(
+////            modifier = modifier
+////                .fillMaxWidth()
+////                .padding(top = 16.dp),
+////            horizontalArrangement = Arrangement.SpaceAround
+////        ) {
+////            if(gameUiState.isAnswer){
+////                Button(
+////                    modifier = modifier
+////                        .padding(start = 8.dp),
+////                    onClick = { gameViewModel.nextQuestion() }
+////                ) {
+////                    Text(stringResource(R.string.next))
+////                }
+////            }else{
+////                Button(
+////                    modifier = modifier
+////                        .padding(start = 8.dp),
+////                    onClick = { gameViewModel.checkUserGuess() }
+////                ) {
+////                    Text(stringResource(R.string.submit))
+////                }
+////            }
+////
+////        }
+////        if (gameUiState.isGameOver) {
+////            FinalScoreDialog(
+////                score = gameUiState.score,
+////                onPlayAgain = { gameViewModel.resetGame() }
+////            )
+////        }
+////
+//
+//    }
+//
+//}
 
 @Composable
-fun BeginningScreen(){
+fun BeginningScreen(
+    navController: NavController
+){
     Column(verticalArrangement = Arrangement.spacedBy(10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(250.dp))
 
@@ -121,7 +161,7 @@ fun BeginningScreen(){
         Spacer(modifier = Modifier.height(25.dp))
 
         Button(
-            onClick = { /* Do something when button is clicked */ },
+            onClick = { navController.navigate(SiemSeeScreen.Second.name) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
@@ -138,7 +178,9 @@ fun BeginningScreen(){
 }
 
 @Composable
-fun SecondScreen() {
+fun SecondScreen(
+    navController: NavController
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -170,7 +212,7 @@ fun SecondScreen() {
         Spacer(modifier = Modifier.height(25.dp))
 
         Button(
-            onClick = { /* Do something when button is clicked */ },
+            onClick = { navController.navigate(SiemSeeScreen.Third.name) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
@@ -187,24 +229,33 @@ fun SecondScreen() {
 }
 
 @Composable
-fun ThirdScreen(){
+fun ThirdScreen(
+    navController: NavController
+){
         Column(
-            verticalArrangement = Arrangement.spacedBy(60.dp),
+            verticalArrangement = Arrangement.spacedBy(50.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()
         ) {
+            Spacer(modifier = Modifier.height(25.dp))
             Text(
                 text="Choose a number"
             )
             for (i in 1..6){
                 Row(horizontalArrangement = Arrangement.spacedBy(50.dp),){
-                    Button(onClick = { /*TODO*/ }) {
+                    Button(onClick = {
+                        navController.navigate(SiemSeeScreen.Fourth.name)
+                    }) {
                         Text(text=(3 * (i - 1) + 1).toString())
                     }
-                    Button(onClick = { /*TODO*/ }) {
+                    Button(onClick = {
+                        navController.navigate(SiemSeeScreen.Fourth.name)
+                    }) {
                         Text(text=(3 * (i - 1) + 2).toString())
                     }
-                    Button(onClick = { /*TODO*/ }) {
+                    Button(onClick = {
+                        navController.navigate(SiemSeeScreen.Fourth.name)
+                    }) {
                         Text(text=(3 * (i - 1) + 3).toString())
                     }
                 }
@@ -213,17 +264,23 @@ fun ThirdScreen(){
 }
 
 @Composable
-fun FourthScreen(){
-    Text(text = "")
+fun FourthScreen(
+    navController: NavController
+){
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()) {
+        Text(text = "")
+        Spacer(modifier = Modifier.height(200.dp))
         Button(onClick = { /*TODO*/ },
             modifier= Modifier.size(300.dp),  //avoid the oval shape
             shape = CircleShape,
             border= BorderStroke(1.dp, Color.Blue),
             contentPadding = PaddingValues(0.dp), //avoid the little icon
-            colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.White, backgroundColor = Color.Red
+            colors = ButtonDefaults.outlinedButtonColors(
+                contentColor =  Color.White,
+                backgroundColor = Color.Red
             ),
 
 
