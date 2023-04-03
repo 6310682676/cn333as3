@@ -38,7 +38,6 @@ class PredictGameViewModel : ViewModel() {
     }
 
     fun getPrediction(no:String){
-        println(predictions[no]?.random())
         val prediction = predictions[no]
         if (prediction != null) {
             _uiState.update { currentState ->

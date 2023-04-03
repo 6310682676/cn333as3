@@ -242,7 +242,6 @@ fun ThirdScreen(
             for (i in 1..4){
                 Row(horizontalArrangement = Arrangement.spacedBy(50.dp),){
                     Button(onClick = {
-                        println((3 * (i - 1) + 1).toString())
                         gameViewModel.getPrediction((3 * (i - 1) + 1).toString())
                         navController.navigate(SiemSeeScreen.Fourth.name)
                     }) {
@@ -280,8 +279,6 @@ fun FourthScreen(
         Spacer(modifier = Modifier.height(200.dp))
         Button(
             onClick = {
-                println(gameUiState.tap)
-                println(gameUiState.prediction)
                 if(gameUiState.totalTap == gameUiState.tap){
                     navController.navigate(SiemSeeScreen.Fifth.name)
                 }else{
